@@ -10,10 +10,50 @@
 
 </head>
 <body>
-    
+<!-- Container for entire site -->
+<div class="container">
+
+    <!-- First row containing Jumbotron -->
+    <div class="row">
+        <!-- Jumbotron for title -->
+        <!-- !For some reason umbotron will not stretch all the way across -->
+        <div class="jumbotron" style="background-color: rgb(53, 53, 53); color: white;">
+            <h1 class="text-center">
+                <strong>Weather Dashboard</strong>
+            </h1>
+        </div>
+    </div>
+
+    <!-- Second row containing search and results -->
+    <div class="row">
+        <!-- Column for Search -->
+        <div class="col-sm-4" id="city-search">
+            <form role="form">
+                <div class="form-group">
+                    <label for="search">Search for a City:</label>
+                    <input type="text" class="form-control" id="city"/>
+                </div>
+            </form>
+            
+            <!-- !Button needs to be fixed -->
+            <button type="submit" class="btn btn-default" id="submit-city">
+                <i class="fa fa-search"></i></button>
+        </div>
+        <!-- Column for Results -->
+        <div class="col-sm-8">
+            <!-- row for daily weather-->
+            <div class="row"></div>
+            <!-- row for weekly weather forecast-->
+            <div class="row"></div>
+        </div>
+    </div>
+
+
+</div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="script.js"></script>
+
 </body>
 </html>
