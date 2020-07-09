@@ -10,38 +10,56 @@ return queryURL + city + apiKey;
 }
 
 function updatePage(weatherData) {
-    // var i=0;
     var day = weatherData.list[0];
-    var location = weatherData.city;
-
-    console.log(weatherData);
-
     var city = $("#city").val().trim();
-
-    var lat = location.coord.lat;
-    var long = location.coord.lon;
-  
+    var location = weatherData.city;
+    console.log(weatherData);
     var card = $("<div class='card'>")
     var cardBody = $("<div class='card-body'>")
-    
-    $(cardBody).append(`<h1>${city} ${day.dt_txt}<img src='https://openweathermap.org/img/w/${day.weather[0].icon}.png'></img></h1>`);
+    var currentDay = new moment().format('M/D/YYYY');
+      
+    $(cardBody).append(`<h1>${city} ${currentDay}<img src='https://openweathermap.org/img/w/${day.weather[0].icon}.png'></img></h1>`);
     $(cardBody).append("<p>Temperature: " + day.main.temp + "F</p>");
     $(cardBody).append("<p>Humidity: " + day.main.humidity + "%</p>");
     $(cardBody).append("<p>Wind Speed: " + day.wind.speed + "MPH</p>");
-
+    
     card.append(cardBody);
     $("#daily-forecast").append(card);
-
+    
+    var lat = location.coord.lat;
+    var long = location.coord.lon;
     var uvIndex = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + long + "&appid=7457011ce05981da5d6a41314151e8a0"
     
     $.ajax({
         url: uvIndex,
         method: "GET"
     }).then(function(response){
-        console.log(response);
         var uv = response.daily[0].uvi;
         $(cardBody).append("<p>UV Index: " + uv + "</p>");
     })
+
+    weeklyForecast(weatherData);
+}
+
+function weeklyForecast(weatherData){
+    
+  for(var i=1; i<=5; i++){
+
+    var day = weatherData.list[i];
+  
+      var card2 = $("<div class='card' id='weekly'>")
+      var cardBody2 = $("<div class='card-body'>")
+      var DaysForward = new moment().add(i, 'day');
+      
+      $(cardBody2).append(DaysForward.format('M/D/YYYY'));
+      $(cardBody2).append(`<img src='https://openweathermap.org/img/w/${day.weather[0].icon}.png'></img>`)
+      $(cardBody2).append("<p>Temperature: " + day.main.temp + "F</p>");
+      $(cardBody2).append("<p>Humidity: " + day.main.humidity + "%</p>");
+  
+    card2.append(cardBody2);
+    $("#weekly-forecast").append(card2)
+  }
+  
 }
 
 
@@ -68,6 +86,10 @@ $("#submit-city").on("click", function(event) {
         ;
       });
 
+
+//! Need to have list of recently searched cities
+//! Need to build out weekly forecast
+//! Need to make sure that previous city goes away
 // update page: put new data into sections on the page
 //clear page
 //click event for search button - needs to add buttons below it with city name

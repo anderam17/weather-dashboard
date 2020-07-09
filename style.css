@@ -1,3 +1,11 @@
-.jumbotron {
-    display: block;
+#weekly {
+    background: blue;
+    color: white;
+    margin: 10px;
+    text-align: center;
+}
+
+#weekly-forecast {
+    display: flex;
+    flex-wrap: nowrap;
 }
