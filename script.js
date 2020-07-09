@@ -20,29 +20,42 @@ return queryURL + city + apiKey;
 var uvIndex = "https://api.openweathermap.org/data/2.5/onecall?lat=33.441792&lon=-94.037689&appid=7457011ce05981da5d6a41314151e8a0"
 function updatePage(weatherData) {
     var i=0;
-    var day = weatherData.response.list[i];
+    var day = weatherData.response.list[0];
+    var location = weatherData.response.city;
 
     var city = $("#city").val().trim();
  // !This also needs the date from moment js.
     var cityName = $("<h1>").text(city);
+    var dailyTemp = day.main.temp;
+    var dailyHumidity = day.main.humidity;
+    var windSpeed = day.wind.speed;
+    var lat = location.coord.lat;
+    var long = location.coord.long;
+    
     $("#daily-forecast").append(cityName);
+    $("#daily-forecast").append("<p>Temperature: " + dailyTemp + "F</p>");
+    $("#daily-forecast").append("<p>Humidity: " + dailyHumidity + "%</p>");
+    $("#daily-forecast").append("<p>Wind Speed: " + windSpeed + "MPH</p>");
 
-    var dailyTemp = 
 
+    var uvIndex = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + long + "&appid=7457011ce05981da5d6a41314151e8a0"
+     
+        $.ajax({
+            url: uvIndex,
+            method: "GET"
+        }).then(function(response){
+            console.log(response);
+            var uv = response.daily[0].uvi;
+            $("#daily-forecast").append("<p>UV Index: " + uv + "</p>");
+        })
 }
 
-var queryURL = buildQuery()
-    $.ajax({
-        url: query,
-        method: "GET"
-    }).then(function(response){
-        console.log(response);
-    })
 
 function clear() {
         $("#weather-section").empty();
       }
 
+//! Also need to save what you did 
 $("#submit-city").on("click", function(event) {
        
         event.preventDefault();
