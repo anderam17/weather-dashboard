@@ -1,8 +1,5 @@
 var uvIndex = "https://api.openweathermap.org/data/2.5/onecall?lat=33.441792&lon=-94.037689&appid=7457011ce05981da5d6a41314151e8a0"
 
-// ! Will need to get day from moment.js 
-
-
 
 function buildQuery(){
 var queryURL = "https://api.openweathermap.org/data/2.5/forecast?q="
@@ -12,7 +9,6 @@ var city = $("#city").val().trim();
 return queryURL + city + apiKey;
 }
 
-// ! Will not append to page 
 function updatePage(weatherData) {
     // var i=0;
     var day = weatherData.list[0];
@@ -22,18 +18,19 @@ function updatePage(weatherData) {
 
     var city = $("#city").val().trim();
 
- // !This also needs the date from moment js.
-
     var lat = location.coord.lat;
     var long = location.coord.lon;
   
     var card = $("<div class='card'>")
     var cardBody = $("<div class='card-body'>")
     
-    $(cardBody).append(`<h1>${city}<img src='https://openweathermap.org/img/w/${day.weather[0].icon}.png'></img></h1>`);
+    $(cardBody).append(`<h1>${city} ${day.dt_txt}<img src='https://openweathermap.org/img/w/${day.weather[0].icon}.png'></img></h1>`);
     $(cardBody).append("<p>Temperature: " + day.main.temp + "F</p>");
     $(cardBody).append("<p>Humidity: " + day.main.humidity + "%</p>");
     $(cardBody).append("<p>Wind Speed: " + day.wind.speed + "MPH</p>");
+
+    card.append(cardBody);
+    $("#daily-forecast").append(card);
 
     var uvIndex = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + long + "&appid=7457011ce05981da5d6a41314151e8a0"
     
@@ -45,9 +42,8 @@ function updatePage(weatherData) {
         var uv = response.daily[0].uvi;
         $(cardBody).append("<p>UV Index: " + uv + "</p>");
     })
-    card.append(cardBody);
-    $("#daily-forecast").append(card);
 }
+
 
 
 function clear() {
