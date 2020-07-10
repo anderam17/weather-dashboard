@@ -10,7 +10,7 @@ return queryURL + city + apiKey;
 function updatePage(weatherData) {
     //variables of the day's weather data, the city name, and locations
     var day = weatherData.list[0];
-    var city = $("#city").val().trim();
+    var city = weatherData.city.name;
     var location = weatherData.city;
 
     var card = $("<div class='card'>")
@@ -85,8 +85,17 @@ $("#submit-city").on("click", function(event) {
         clear();
         var city = $("#city").val().trim();
 
-        var previousCity = $("<li class='list-group-item' id='old-city'>").text(city);
+        var previousCity = $("<li class='list-group-item old-city'>").text(city);
         $("#previous-searches").prepend(previousCity);
+
+        previousCity.on("click", function(event) {
+          clear();
+          var oldCity = event.target.textContent;
+          $.ajax({
+            url: buildQuery(oldCity),
+            method: "GET"
+          }).then(updatePage)
+        });
 
         // Build the query URL for the ajax request to the NYT API
         var queryURL = buildQuery(city);
@@ -98,3 +107,4 @@ $("#submit-city").on("click", function(event) {
         }).then(updatePage)
         ;
       });
+  
