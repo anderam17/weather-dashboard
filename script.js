@@ -28,13 +28,25 @@ function updatePage(weatherData) {
     var lat = location.coord.lat;
     var long = location.coord.lon;
     var uvIndex = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + long + "&appid=7457011ce05981da5d6a41314151e8a0"
-    
+    //low: 1-2 (green) moderate(yellow):3-5, high(orange):6-7 VHigh(red):8-10 Extreme(violet): 11+
     $.ajax({
         url: uvIndex,
         method: "GET"
     }).then(function(response){
         var uv = response.daily[0].uvi;
-        $(cardBody).append("<p>UV Index: " + uv + "</p>");
+        var color = "";
+        if(uv <= 2.99){
+          color = "green";
+        }else if(uv <= 5.99){
+          color = "yellow";
+        }else if(uv <= 7.99){
+          color = "orange";
+        }else if(uv <= 10.99){
+          color = "red";
+        }else{
+          color = "purple";
+        }
+        $(cardBody).append("<p id='uv-paragraph'>UV Index:</p><div id='uv-index' style='background-color: " + color + "'>" + uv + "</div>");
     })
 
     weeklyForecast(weatherData);
