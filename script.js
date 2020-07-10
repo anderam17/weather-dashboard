@@ -1,19 +1,18 @@
-var uvIndex = "https://api.openweathermap.org/data/2.5/onecall?lat=33.441792&lon=-94.037689&appid=7457011ce05981da5d6a41314151e8a0"
 
-
+//builds the API key URL's based on the city entered by the user
 function buildQuery(city){
 var queryURL = "https://api.openweathermap.org/data/2.5/forecast?q="
 var apiKey = "&appid=7457011ce05981da5d6a41314151e8a0&units=imperial"
-
-
 return queryURL + city + apiKey;
 }
 
+//takes in weather data for the chosen city and appends daily weather and weekly forecast.
 function updatePage(weatherData) {
+    //variables of the day's weather data, the city name, and locations
     var day = weatherData.list[0];
     var city = $("#city").val().trim();
     var location = weatherData.city;
-    console.log(weatherData);
+
     var card = $("<div class='card'>")
     var cardBody = $("<div class='card-body'>")
     var currentDay = new moment().format('M/D/YYYY');
@@ -67,7 +66,6 @@ function clear() {
         $("#weekly-forecast").empty();
       }
 
-//! Also need to save what you did 
 $("#submit-city").on("click", function(event) {
        
         event.preventDefault();
@@ -88,7 +86,3 @@ $("#submit-city").on("click", function(event) {
         }).then(updatePage)
         ;
       });
-
-
-//! Need to have list of recently searched cities
-//! create list item for each search item

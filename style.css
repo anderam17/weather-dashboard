@@ -15,4 +15,6 @@
     flex-wrap: nowrap;
 }
 
-
+#submit-city {
+    background: rgb(138, 138, 212);
+}
