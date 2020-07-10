@@ -9,3 +9,10 @@
     display: flex;
     flex-wrap: nowrap;
 }
+
+#form-group {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+

@@ -1,11 +1,11 @@
 var uvIndex = "https://api.openweathermap.org/data/2.5/onecall?lat=33.441792&lon=-94.037689&appid=7457011ce05981da5d6a41314151e8a0"
 
 
-function buildQuery(){
+function buildQuery(city){
 var queryURL = "https://api.openweathermap.org/data/2.5/forecast?q="
 var apiKey = "&appid=7457011ce05981da5d6a41314151e8a0&units=imperial"
 
-var city = $("#city").val().trim();
+
 return queryURL + city + apiKey;
 }
 
@@ -51,7 +51,7 @@ function weeklyForecast(weatherData){
       var cardBody2 = $("<div class='card-body'>")
       var DaysForward = new moment().add(i, 'day');
       
-      $(cardBody2).append(DaysForward.format('M/D/YYYY'));
+      $(cardBody2).append("<strong>" + DaysForward.format('M/D/YYYY') + "</strong>");
       $(cardBody2).append(`<img src='https://openweathermap.org/img/w/${day.weather[0].icon}.png'></img>`)
       $(cardBody2).append("<p>Temperature: " + day.main.temp + "F</p>");
       $(cardBody2).append("<p>Humidity: " + day.main.humidity + "%</p>");
@@ -62,10 +62,9 @@ function weeklyForecast(weatherData){
   
 }
 
-
-
 function clear() {
-        $("#weather-section").empty();
+        $("#daily-forecast").empty();
+        $("#weekly-forecast").empty();
       }
 
 //! Also need to save what you did 
@@ -74,9 +73,13 @@ $("#submit-city").on("click", function(event) {
         event.preventDefault();
       
         clear();
-      
+        var city = $("#city").val().trim();
+
+        var previousCity = $("<li class='list-group-item' id='old-city'>").text(city);
+        $("#previous-searches").prepend(previousCity);
+
         // Build the query URL for the ajax request to the NYT API
-        var queryURL = buildQuery();
+        var queryURL = buildQuery(city);
       
         // The data then gets passed as an argument to the updatePage function
         $.ajax({
@@ -88,8 +91,4 @@ $("#submit-city").on("click", function(event) {
 
 
 //! Need to have list of recently searched cities
-//! Need to build out weekly forecast
-//! Need to make sure that previous city goes away
-// update page: put new data into sections on the page
-//clear page
-//click event for search button - needs to add buttons below it with city name
+//! create list item for each search item
