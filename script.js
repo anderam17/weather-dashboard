@@ -28,7 +28,7 @@ function updatePage(weatherData) {
     var lat = location.coord.lat;
     var long = location.coord.lon;
     var uvIndex = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + long + "&appid=7457011ce05981da5d6a41314151e8a0"
-    //low: 1-2 (green) moderate(yellow):3-5, high(orange):6-7 VHigh(red):8-10 Extreme(violet): 11+
+
     $.ajax({
         url: uvIndex,
         method: "GET"
@@ -79,32 +79,64 @@ function clear() {
       }
 
 $("#submit-city").on("click", function(event) {
-       
-        event.preventDefault();
-      
-        clear();
-        var city = $("#city").val().trim();
+  event.preventDefault();
 
-        var previousCity = $("<li class='list-group-item old-city'>").text(city);
-        $("#previous-searches").prepend(previousCity);
+  clear();
+  var city = $("#city").val().trim();
 
-        previousCity.on("click", function(event) {
-          clear();
-          var oldCity = event.target.textContent;
-          $.ajax({
-            url: buildQuery(oldCity),
-            method: "GET"
-          }).then(updatePage)
-        });
+  var previousCity = $("<li class='list-group-item old-city'>").text(city);
+  $("#previous-searches").prepend(previousCity);
+  localStorage.setItem('lastCity', city);
 
-        // Build the query URL for the ajax request to the NYT API
-        var queryURL = buildQuery(city);
-      
-        // The data then gets passed as an argument to the updatePage function
-        $.ajax({
-          url: queryURL,
-          method: "GET"
-        }).then(updatePage)
-        ;
-      });
+  previousCity.on("click", function(event) {
+    clear();
+    var oldCity = event.target.textContent;
+    localStorage.setItem('lastCity', oldCity);
+    $.ajax({
+      url: buildQuery(oldCity),
+      method: "GET"
+    }).then(updatePage)
+  });
+
+  // Build the query URL for the ajax request to the NYT API
+  var queryURL = buildQuery(city);
+
+  // The data then gets passed as an argument to the updatePage function
+  $.ajax({
+    url: queryURL,
+    method: "GET"
+  }).then(updatePage);
+});
+
+
+var lastCity = localStorage.getItem('lastCity');
+
+if(lastCity){
+  var previousCity = $("<li class='list-group-item old-city'>").text(lastCity);
+  $("#previous-searches").prepend(previousCity);
+
+  previousCity.on("click", function(event) {
+    clear();
+    var oldCity = event.target.textContent;
+    localStorage.setItem('lastCity', oldCity);
+    $.ajax({
+      url: buildQuery(oldCity),
+      method: "GET"
+    }).then(updatePage)
+  });
+
+  // Build the query URL for the ajax request to the NYT API
+  var queryURL = buildQuery(lastCity);
+
+  // The data then gets passed as an argument to the updatePage function
+  $.ajax({
+    url: queryURL,
+    method: "GET"
+  }).then(updatePage);
+}
+// when the page loads, if lastCity exists:
+// 1. buildQuery using city name
+// 2. AJAX
+// 3. run updatePage
+// 4. add the name of the city to previous searches
   
